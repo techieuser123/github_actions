@@ -28,8 +28,6 @@ SECRET_KEY = get_random_secret_key()
 DEBUG = True
 
 ALLOWED_HOSTS = ['https://github-actions-cie5.onrender.com','*']
-CSRF_TRUSTED_ORIGINS = [
-    'http://x23380322-bookhive-devops-env.eba-jx9ipzhw.eu-west-1.elasticbeanstalk.com/']
 
 # Application definition
 

@@ -1,0 +1,111 @@
+{% extends "index.html" %}
+{% load static %}
+{% block css %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block nav %}
+<ul class="menu-inner py-1">
+  <!-- Dashboard -->
+  <li class="menu-item ">
+    <a href="{% url 'admin_book_list' %}" class="menu-link">
+      <i class="menu-icon tf-icons bx bx-collection me-0"></i>
+      <div data-i18n="Basic">All Books</div>
+    </a>
+  </li>
+  <li class="menu-item active">
+    <a href="{% url 'admin_book_request_list' %}" class="menu-link">
+      <i class="bx bx-bell me-1"></i>
+      <div data-i18n="Basic">Book Requests</div>
+    </a>
+  </li>
+  {% if not request.user.is_staff %}
+    <li class="menu-item">
+        <a href="{% url 'admin_book_request_list' %}" class="menu-link">
+            <i class="bx bx-user me-1"></i>
+            
+        <div data-i18n="Basic">User List</div>
+        </a>
+    </li>
+    {% endif %}
+  <li class="menu-item">
+    <a href="{% url 'admin_book_status_list' %}" class="menu-link">
+        <i class="bx bx-user me-1"></i>
+        
+    <div data-i18n="Basic">Request Status</div>
+    </a>
+</li>
+
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4">
+    <h4 style="color:#403d39" class="fw-bold py-3 mb-4"><span class="text-muted" >Admin /</span> Book Requests</h4>
+  </h4>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card" style="background-color:#ccc5b9;">
+        <!-- Notifications -->
+        <h5 class="card-header" style="color:#403d39;">Recent Book Requests</h5>
+
+        <form method="post">
+        <div class="table-responsive">
+          <table class="table table-striped table-borderless border-bottom">
+            <thead>
+              <tr>
+                <th class="text-nowrap" style="color:#403d39;">Book Name</th>
+                <th class="text-nowrap" style="color:#403d39;">User Name</th>
+                <th class="text-nowrap text-center" style="color:#403d39;">Approve Request</th>
+                <th class="text-nowrap text-center" style="color:#403d39;">Reject Request</th>
+
+              </tr>
+            </thead>
+            <tbody>
+     
+                {% csrf_token %}
+                {% for obj in book_lst %}
+                <tr style="background-color:#ccc5b9">
+                  <td  class="text-nowrap" style="color:#403d39; font-weight:bold;">{{obj.book__book_title}} </td>
+                  <td class="text-nowrap" style="color:#403d39;  font-weight:bold;">{{obj.user__username}}</td>
+                  <td>
+                    <div class="form-check d-flex justify-content-center" style="color:green; font-weight:bold;">
+                      <input name="approved_{{obj.id}}" value="{{obj.id}}" class="form-check-input" type="checkbox" id="defaultCheck1{{ obj.id }}"
+                        onclick="chkBoxFunc('defaultCheck2{{ obj.id }}', 'defaultCheck1{{ obj.id }}')" >
+                    </div>
+                  </td>
+                  <td>
+                    <div class="form-check d-flex justify-content-center">
+                      <input name="reject_{{obj.id}}" value="{{obj.id}}" class="form-check-input" type="checkbox" id="defaultCheck2{{obj.id}}"
+                        onclick="chkBoxFunc('defaultCheck1{{ obj.id }}', 'defaultCheck2{{ obj.id }}')" >
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+      
+            </tbody>
+          </table>
+        </div>
+        <div class="card-body">
+
+          <form action="javascript:void(0);">
+            <div class="row">
+
+              <div class="mt-4">
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </form>
+        <!-- /Notifications -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

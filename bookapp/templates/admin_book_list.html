@@ -1,0 +1,150 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+
+{% block search %}
+<div class="navbar-nav align-items-center">
+  <div class="nav-item d-flex align-items-center">
+    <i class="bx bx-search fs-4 lh-0" style="color:white; margin-right:10px;"></i>
+    <form id="searchForm" method="GET" class="d-flex align-items-center">
+      <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." name="query" id="searchInput" />
+    </form>
+  </div>
+  
+  
+</div>
+{% endblock%}
+
+{% block nav %}
+<ul class="menu-inner py-1">
+    <!-- Dashboard -->
+    <li class="menu-item active">
+        <a href="{% url 'admin_book_list' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-collection me-0"></i>
+        <div data-i18n="Basic">All Books</div>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="{% url 'admin_book_request_list' %}" class="menu-link">
+            <i class="bx bx-bell me-1"></i>
+        <div data-i18n="Basic">Book Requests</div>
+        </a>
+    </li>
+    {% if not request.user.is_staff %}
+    <li class="menu-item">
+        <a href="{% url 'admin_book_request_list' %}" class="menu-link">
+            <i class="bx bx-user me-1"></i>
+            
+        <div data-i18n="Basic">User List</div>
+        </a>
+    </li>
+    {% endif %}
+    <li class="menu-item">
+        <a href="{% url 'admin_book_status_list' %}" class="menu-link">
+            <i class="bx bx-user me-1"></i>
+            
+        <div data-i18n="Basic">Request Status</div>
+        </a>
+    </li>
+
+  </ul>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h4 style="color:#403d39" class="fw-bold py-3 mb-4"><span class="text-muted" >Admin /</span>All Books</h4>
+
+      <!-- Basic Bootstrap Table -->
+      
+    <!-- Table -->
+    <div class="card">
+      <div class="table-responsive text-nowrap" style="background-color: #ccc5b9;">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="color:#403d39;">Book Cover</th>
+              <th style="color:#403d39;">Name</th>
+              <th style="color:#403d39;">Book Status</th>
+              <th style="color:#403d39;">Operations</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            {% for obj in book_list %}
+            <tr>
+              <td style="color:#403d39;">
+                <!-- <img src="{% static obj.book_img %}" alt="{{ obj.book_title }}" style="width:100px;height:auto;"> -->
+                <img src="/media/media/{{ obj.book_img }}" alt="{{ obj.book_title }}" style="width:100px;height:auto;">
+              </td>
+              <td style="color:#403d39;">{{ obj.book_title }}</td>
+              {% if obj.available %}
+              <td>
+                <span class="badge bg-label-success me-1" style="font-size: 14px; padding: 8px 12px; font-weight: bold;">
+                  Available
+                </span>
+              </td>
+              {% else %}
+              <td>
+                <span class="badge bg-label-warning me-1" style="font-size: 14px; padding: 8px 12px; font-weight: bold;">
+                  Occupied
+                </span>
+              </td>
+              {% endif %}
+              
+              <td>
+                <!-- Edit Button -->
+                <a class="btn btn-primary btn-sm" href="{% url 'admin_book_detail' %}?book={{ obj.id }}">
+                  <i class="bx bx-edit-alt"></i> Edit
+                </a>
+
+                <!-- Delete Button -->
+                <form method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="book_id" value="{{ obj.id }}">
+                  <button type="submit" name="deletesubmit" value="delete" class="btn btn-danger btn-sm">
+                    <i class="bx bx-trash"></i> Delete
+                  </button>
+                </form>
+
+                <!-- Release Button (if not available) -->
+                {% if not obj.available %}
+                <form method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="book_id" value="{{ obj.id }}">
+                  <button type="submit" name="releasesubmit" value="release" class="btn btn-warning btn-sm">
+                    <i class="bx bx-refresh"></i> Release
+                  </button>
+                </form>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- End Table -->
+
+      <!--/ Basic Bootstrap Table -->
+
+      <div class="mt-4 d-inline-flex">
+        <a href="{% url 'admin_book_detail' %}"><button type="button" class="btn btn-primary btn-md">Add Book</button></a>
+      </div>
+
+
+
+  </div>
+{% endblock %}
+
+
+<script>
+  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent the default form submission
+      document.getElementById('searchForm').submit(); // Submit the form
+    }
+  });
+</script>

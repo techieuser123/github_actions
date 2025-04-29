@@ -1,0 +1,123 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block search %}
+<div class="navbar-nav align-items-center">
+  <div class="nav-item d-flex align-items-center">
+    <i class="bx bx-search fs-4 lh-0" style="color:white; margin-right:10px;"></i>
+    <form id="searchForm" method="GET" class="d-flex align-items-center">
+      <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." name="query" id="searchInput" />
+    </form>
+  </div>
+  
+  
+</div>
+{% endblock%}
+
+{% block nav %}
+<ul class="menu-inner py-1">
+  <!-- Dashboard -->
+  <li class="menu-item active">
+    <a href="{% url 'user_book_list' %}" class="menu-link">
+      <i class="menu-icon tf-icons bx bx-collection me-0"></i>
+      <div data-i18n="Basic">Available Books</div>
+    </a>
+  </li>
+  <li class="menu-item">
+    <a href="{% url 'user_book_history' %}" class="menu-link">
+      <i class="bx bx-user me-1"></i>
+
+      <div data-i18n="Basic">Request Status</div>
+    </a>
+  </li>
+
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+  <!-- Content -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 style="color:#1b263b" class="fw-bold py-3 mb-4"></span>All Available Books</h4>
+
+    <!-- Basic Bootstrap Table -->
+    <div class="card" style="background-color:#15616d">
+
+      <div class="table-responsive text-nowrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="color:white;">Book Cover</th>
+              <th style="color:white;">Name</th>
+              <th style="color:white;">Request Status</th>
+              <th style="color:white;">Request Book</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            {% for obj in book_list %}
+            <tr>
+
+              <!-- <td style="color:white;"><img src="{% static obj.book_img %}" alt="{{ obj.book_title }}" style="width:100px;height:auto;"></td> -->
+              <td style="color:white;"><img src="/media/media/{{obj.book_img}}" alt="{{ obj.book_title }}" style="width:100px;height:auto;"></td>
+              <td style="color:white;">{{obj.book_title}}</td>
+
+              {% if not obj.occupied %}
+              <td><span class="badge bg-label-success me-1" style="font-size: 14px; padding: 8px 12px; font-weight: bold;">Available</span></td>
+              {% else %}
+              <td><span class="badge bg-label-warning me-1" style="font-size: 14px; padding: 8px 12px; font-weight: bold;">Occupied</span></td>
+              {% endif %}
+
+              <td>
+                <div class="dropdown">
+           
+                  {% if obj.available == 'pending' %}
+                  <button type="submit" disabled name="request_book" value="{{obj.id}}"
+                    class="btn rounded-pill btn-outline-info">request pending</button>
+                  {% elif obj.available == 'approved' %}
+                  <button type="submit" name="request_book" value="{{obj.id}}"
+                    class="btn rounded-pill btn-outline-success">request accepted</button>
+                    <br>
+                  <span style="color: green;">please collect your book within 1 day</span>
+                  {% elif obj.available == 'rejected' %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="request_book" value="{{obj.id}}"
+                      class="btn rounded-pill btn-outline-success">request book</button>
+                      <span style="color: red;">your request has been rejected</span>
+                  </form>
+                  {% else %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="request_book" value="{{obj.id}}"
+                      class="btn rounded-pill btn-outline-success">request book</button>
+                      
+                    
+                  </form>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--/ Basic Bootstrap Table -->
+
+
+
+  </div>
+
+
+  {% endblock %}
+
+  <script>
+    document.getElementById('searchInput').addEventListener('keypress', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('searchForm').submit(); // Submit the form
+      }
+    });
+  </script>

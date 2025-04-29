@@ -1,0 +1,59 @@
+{% extends "auth_index.html" %}
+{% load static %}
+
+
+{% block content %}
+<h1 style="color:#403d39; justify-content:center;">Login</h1>
+<h4 style="color:#403d39;" class="mb-2">Welcome back to BookHive! 👋</h4>
+<form id="formAuthentication" class="mb-3" method="POST">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label style="color:#403d39;" for="email" class="form-label">Username</label>
+    <input
+      type="text"
+      class="form-control"
+      id="email"
+      name="email-username"
+      placeholder="Enter your email or username"
+      autofocus
+      required
+    />
+  </div>
+  <div class="mb-3 form-password-toggle">
+    <div class="d-flex justify-content-between">
+      <label style="color:#403d39;" class="form-label" for="password">Password</label>
+      <a href="auth-forgot-password-basic.html">
+     
+      </a>
+    </div>
+    <div class="input-group input-group-merge">
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        name="password"
+        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+        aria-describedby="password"
+        required
+      />
+      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+    </div>
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-secondary d-grid w-100" style="background-color:#15616d"  type="submit">Sign in</button>
+  </div>
+</form>
+<p class="text-center" style="color:#403d39">
+  <span>New on BookHive?</span>
+  <a href="{% url 'register_page' %}">
+    <span style="color:#1a659e">Create an account</span>
+  </a>
+</p>
+<p class="text-center">
+  <span style="color: red;">{{error}}</span>
+</p>
+{% endblock %}
+
+{% block login_register %}
+<span class="app-brand-text demo text-body fw-bolder">Login</span>
+{% endblock %}

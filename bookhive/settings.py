@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['https://github-actions-cie5.onrender.com','*']
 CSRF_TRUSTED_ORIGINS = [
     'https://github-actions-cie5.onrender.com',
 ]
+
 # Application definition
 
 INSTALLED_APPS = [

@@ -130,6 +130,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    neds: test
 
     steps:
       - name: Checkout code

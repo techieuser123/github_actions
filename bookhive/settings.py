@@ -27,7 +27,7 @@ SECRET_KEY = get_random_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://github-actions-cie5.onrender.com','*']
+ALLOWED_HOSTS = ['https://github-actions-cie5.onrender.com','http://my-test-env.eba-sb6nhzsh.ap-northeast-3.elasticbeanstalk.com/','*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://github-actions-cie5.onrender.com',

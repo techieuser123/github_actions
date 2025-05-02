@@ -124,6 +124,7 @@ jobs:
           aws elasticbeanstalk update-environment \
             --environment-name ${{ secrets.EB_ENV_NAME }} \
             --version-label "v-${{ github.run_number }}"
+            
 
 
           
